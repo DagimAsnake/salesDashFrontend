@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AdminAuthContext from "../store/Admin-authContext";
 
 const Login = () => {
+    const adminAuthCtx = useContext(AdminAuthContext)
+
+    const navigate = useNavigate()
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [errMsg, setErrMsg] = useState("")
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -18,7 +24,38 @@ const Login = () => {
         event.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
-            console.log(`Email: ${email}, Password: ${password}`);
+            const loginRequest = async () => {
+                const response = await fetch("http://localhost:8000/auth/login", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    console.log("something is wrong");
+                    console.log(response)
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                setErrMsg(data.msg);
+
+                const remainingMilliseconds = 60 * 60 * 1000;
+                const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+
+                adminAuthCtx.login(data.token, expiryDate.toISOString());
+
+                navigate("/");
+
+            };
+
+            loginRequest();
         } else {
             setErrors(validationErrors);
         }
@@ -71,6 +108,7 @@ const Login = () => {
                     />
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                 </div>
+                <p className="text-red-500 text-lg">{errMsg}</p>
                 <div className="flex flex-col mb-8">
                     <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
                         Login
