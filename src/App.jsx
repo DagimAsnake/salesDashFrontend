@@ -5,6 +5,8 @@ import AdminAuthContext from './components/store/Admin-authContext'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import LoginAdmin from './components/Auth/LoginAdmin'
+import ForgetPassword from './components/Auth/ForgetPassword'
+import ChangePassword from './components/Auth/ChangePassword'
 import NotFound404 from './components/NotFound404'
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path='products' element={<Products />} />
         </Route>
         <Route path='/login' element={<LoginAdmin />} />
+        <Route path='/forgetpassword' element={<ForgetPassword />} />
+        <Route path="/auth/passwordreset/:userId/:token" element={<ChangePassword />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
     </Router>
