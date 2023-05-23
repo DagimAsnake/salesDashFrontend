@@ -1,11 +1,19 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { HiOutlineBell, HiOutlineSearch, HiOutlineChatAlt } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
+import AdminAuthContext from '../store/Admin-authContext'
 
 export default function Header() {
+    const adminAuthCtx = useContext(AdminAuthContext)
+
     const navigate = useNavigate()
+
+
+    const logoutHandler = () => {
+        adminAuthCtx.logout()
+    }
 
     return (
         <div className="bg-white h-[64px] min-h-[64px] px-4 flex items-center border-b border-gray-200 justify-between">
@@ -129,6 +137,7 @@ export default function Header() {
                             <Menu.Item>
                                 {({ active }) => (
                                     <div
+                                        onClick={logoutHandler}
                                         className={classNames(
                                             active && 'bg-gray-100',
                                             'active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200'
