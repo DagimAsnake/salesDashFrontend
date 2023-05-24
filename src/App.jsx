@@ -8,6 +8,7 @@ import LoginAdmin from './components/Auth/LoginAdmin'
 import ForgetPassword from './components/Auth/ForgetPassword'
 import ChangePassword from './components/Auth/ChangePassword'
 import Profile from './pages/Profile'
+import UpdatePassword from './pages/UpdatePassword'
 import NotFound404 from './components/NotFound404'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path='products' element={<Products />} />
           <Route path='profile' element={<Profile />} />
+          <Route path="updatepassword" element={<UpdatePassword />} />
         </Route>
         <Route path='/login' element={<LoginAdmin />} />
         <Route path='/forgetpassword' element={<ForgetPassword />} />
