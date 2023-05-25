@@ -24,7 +24,7 @@ function App() {
         }
         >
           <Route index element={<Dashboard />} />
-          <Route path='products' element={<Products />} />
+          <Route path='sales' element={<Products />} />
           <Route path='profile' element={<Profile />} />
           <Route path="updatepassword" element={<UpdatePassword />} />
         </Route>

@@ -2,8 +2,6 @@ import React from 'react'
 import DashboardStatus from '../components/DashboardStatus'
 import TransactionChart from '../components/TransactionChart'
 import BuyerPieChart from '../components/BuyerPieChart'
-import RecentOrders from '../components/RecentOrders'
-import PopularProducts from '../components/PopularProducts'
 
 function Dashboard() {
     return (
@@ -12,10 +10,6 @@ function Dashboard() {
             <div className="flex flex-row gap-4 w-full">
                 <TransactionChart />
                 <BuyerPieChart />
-            </div>
-            <div className="flex flex-row gap-4 w-full">
-                <RecentOrders />
-                <PopularProducts />
             </div>
         </div >
     )
