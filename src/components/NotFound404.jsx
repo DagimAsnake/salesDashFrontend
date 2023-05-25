@@ -1,32 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-function NotFound404() {
+const NotFound404 = () => {
     return (
-        <>
-            <div className="flex justify-center">
-                <div class="bg-gradient-to-r">
-                    <div class="w-9/12 m-auto py-16 min-h-screen flex items-center justify-center">
-                        <div class="bg-white shadow overflow-hidden sm:rounded-lg pb-8">
-                            <div class="border-t border-gray-200 text-center pt-8">
-                                <h1 class="text-9xl font-bold text-blue-400">404</h1>
-                                <h1 class="text-6xl font-medium py-8">oops! Page not found</h1>
-                                <p class="text-2xl pb-8 px-12 font-medium">
-                                    Oops! The page you are looking for does not exist. It might
-                                    have been moved or deleted.
-                                </p>
-                                <Link to={"/"}>
-                                    <button class="bg-gradient-to-r hover:bg-blue-500 border-4 hover:text-white font-semibold px-6 py-3 rounded-md mr-6">
-                                        HOME
-                                    </button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+            <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
+            <p className="text-gray-700 mt-4">The page you are looking for does not exist.</p>
+            <Link to="/" className="text-blue-500 hover:text-blue-700 mt-4">Go back to the homepage</Link>
+        </div>
     );
-}
+};
 
 export default NotFound404;
