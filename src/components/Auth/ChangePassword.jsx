@@ -10,6 +10,7 @@ const ChangePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({});
     const [errMsg, setErrMsg] = useState("")
+    const [isPending, setIsPending] = useState(false)
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
@@ -22,6 +23,7 @@ const ChangePassword = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsPending(true)
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             const loginRequest = async () => {
@@ -43,7 +45,7 @@ const ChangePassword = () => {
 
                 const data = await response.json();
                 console.log(data);
-
+                setIsPending(false)
                 setErrMsg(data.msg)
 
                 if (data.msg === "Password Changed Successfully") {
@@ -106,9 +108,12 @@ const ChangePassword = () => {
                     </div>
                     <p className="text-red-500 text-lg">{errMsg}</p>
                     <div className="flex flex-col mb-8">
-                        <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                        {!isPending && <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
                             Submit
-                        </button>
+                        </button>}
+                        {isPending && <button disabled className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                            Submiting
+                        </button>}
                     </div>
                 </form>
             </div>

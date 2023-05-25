@@ -11,6 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
     const [errMsg, setErrMsg] = useState("")
+    const [isPending, setIsPending] = useState(false)
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -22,6 +23,7 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsPending(true)
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             const loginRequest = async () => {
@@ -43,7 +45,7 @@ const Login = () => {
 
                 const data = await response.json();
                 console.log(data);
-
+                setIsPending(false)
                 setErrMsg(data.msg);
 
                 const remainingMilliseconds = 60 * 60 * 1000;
@@ -111,9 +113,12 @@ const Login = () => {
                     </div>
                     <p className="text-red-500 text-lg">{errMsg}</p>
                     <div className="flex flex-col mb-8">
-                        <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                        {!isPending && <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
                             Login
-                        </button>
+                        </button>}
+                        {isPending && <button disabled className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                            Submiting
+                        </button>}
                         <Link to={'/forgetpassword'} className="text-blue-500 hover:underline">
                             Forgot Password?
                         </Link>

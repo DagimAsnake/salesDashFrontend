@@ -12,6 +12,7 @@ const Profile = () => {
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
 
+    const [isPending, setIsPending] = useState(false)
 
     useEffect(() => {
         const singleFetch = async () => {
@@ -41,6 +42,8 @@ const Profile = () => {
     const submitHandler = (e) => {
         e.preventDefault()
 
+        setIsPending(true)
+
         const signUpEmployee = async () => {
             const response = await fetch("http://localhost:8000/user/edit", {
                 method: "PUT",
@@ -63,6 +66,7 @@ const Profile = () => {
             const data = await response.json();
 
             console.log(data);
+            setIsPending(false)
 
             if (data.msg === "Data Updated Successfully") {
                 navigate("/");
@@ -199,7 +203,9 @@ const Profile = () => {
                             </div>
 
                             <div className="w-44 items-center text-center text-black rounded-lg hover:bg-black my-5 hover:text-white p-2 text-xl font-bold cursor-pointer tracking-wider border">
-                                <button> Update</button>
+                                {!isPending && <button> Update</button>}
+                                {isPending && <button disabled> updating</button>}
+
                             </div>
                         </form>
                     </div>

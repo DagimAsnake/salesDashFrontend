@@ -6,6 +6,7 @@ const ForgetPassword = () => {
     const [email, setEmail] = useState("");
     const [isLinkSent, setIsLinkSent] = useState("");
     const [errors, setErrors] = useState({});
+    const [isPending, setIsPending] = useState(false)
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -13,6 +14,7 @@ const ForgetPassword = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsPending(true)
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             const loginRequest = async () => {
@@ -33,7 +35,7 @@ const ForgetPassword = () => {
 
                 const data = await response.json();
                 console.log(data);
-
+                setIsPending(false)
                 setIsLinkSent(data.msg);
 
             };
@@ -76,9 +78,12 @@ const ForgetPassword = () => {
                     </div>
                     <p className="text-red-500 text-lg">{isLinkSent}</p>
                     <div className="flex flex-col mb-8">
-                        <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                        {!isPending && <button className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
                             Submit
-                        </button>
+                        </button>}
+                        {isPending && <button disabled className="bg-blue-500 text-white py-3 mb-2 px-4 rounded-md hover:bg-blue-600 transition duration-200" type="submit">
+                            Submiting
+                        </button>}
                         <Link to={'/login'} className="text-blue-500 hover:underline">
                             Back
                         </Link>
