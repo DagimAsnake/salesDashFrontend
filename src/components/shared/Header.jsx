@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState, useEffect } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { HiOutlineBell, HiOutlineSearch, HiOutlineChatAlt } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
@@ -10,10 +10,31 @@ export default function Header() {
 
     const navigate = useNavigate()
 
+    const [role, setRole] = useState("")
 
     const logoutHandler = () => {
         adminAuthCtx.logout()
     }
+
+    useEffect(() => {
+        const datafetch = async () => {
+            const response = await fetch(
+                "http://localhost:8000/auth/verifyusertoken",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + adminAuthCtx.token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+            console.log(data);
+
+            setRole(data.payload.role);
+        };
+        datafetch();
+    }, [adminAuthCtx]);
 
     return (
         <div className="bg-white h-[64px] min-h-[64px] px-4 flex items-center border-b border-gray-200 justify-between">
@@ -124,13 +145,14 @@ export default function Header() {
                             <Menu.Item>
                                 {({ active }) => (
                                     <div
-                                        onClick={() => navigate('/settings')}
+                                        onClick={() => navigate('/adduser')}
                                         className={classNames(
                                             active && 'bg-gray-100',
-                                            'active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200'
+                                            'active:bg-gray-200 rounded-sm px-4 py-2 text-gray-700 cursor-pointer focus:bg-gray-200',
+                                            role === "Admin" ? "" : "hidden"
                                         )}
                                     >
-                                        Settings
+                                        Add User
                                     </div>
                                 )}
                             </Menu.Item>

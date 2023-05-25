@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { DashboardBottom, DashboardTop } from '../constants/Navigation'
 import { Link, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
@@ -13,9 +13,31 @@ function Sidebar() {
 
     const adminAuthCtx = useContext(AdminAuthContext)
 
+    const [role, setRole] = useState("")
+
     const logoutHandler = () => {
         adminAuthCtx.logout()
     }
+
+    useEffect(() => {
+        const datafetch = async () => {
+            const response = await fetch(
+                "http://localhost:8000/auth/verifyusertoken",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + adminAuthCtx.token,
+                    },
+                }
+            );
+
+            const data = await response.json();
+            console.log(data);
+
+            setRole(data.payload.role);
+        };
+        datafetch();
+    }, [adminAuthCtx]);
 
     return (
         <div className='flex flex-col bg-neutral-900 w-60 p-3 text-white'>
@@ -27,7 +49,7 @@ function Sidebar() {
                 <div className='grid grid-cols-1 gap-1'>
                     {DashboardTop.map((item) => {
                         return (
-                            <SidebarLink key={item.key} item={item} />
+                            <SidebarLink key={item.key} item={item} role={role} />
                         )
                     })}
                 </div>
@@ -35,7 +57,7 @@ function Sidebar() {
             <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700'>
                 {DashboardBottom.map((item) => {
                     return (
-                        <SidebarLink key={item.key} item={item} />
+                        <SidebarLink key={item.key} item={item} role={role} />
                     )
                 })}
                 <div onClick={logoutHandler} className={classNames('text-red-500 cursor-pointer', linkClasses)}>
@@ -47,11 +69,11 @@ function Sidebar() {
     )
 }
 
-function SidebarLink({ item }) {
+function SidebarLink({ item, role }) {
     const { pathname } = useLocation()
 
     return (
-        <Link to={item.path} className={classNames(pathname === item.path ? "text-white bg-neutral-700" : "text-neutral-400", linkClasses)}>
+        <Link to={item.path} className={classNames(pathname === item.path ? "text-white bg-neutral-700" : "text-neutral-400", linkClasses, role === "Employee" && (item.label === 'Users' || item.label === "Products" || item.label === "Orders" || item.label === "Sales") ? "hidden" : "")}>
             <span className='text-xl'>{item.icon}</span>
             <span className='hidden sm:inline md:inline'>{item.label}</span>
         </Link>

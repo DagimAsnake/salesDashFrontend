@@ -1,13 +1,14 @@
 import {
     HiOutlineViewGrid,
     HiOutlineCube,
-    // HiOutlineShoppingCart,
-    // HiOutlineUsers,
-    // HiOutlineDocumentText,
-    // HiOutlineAnnotation,
+    HiOutlineShoppingCart,
+    HiOutlineUsers,
+    HiOutlineDocumentText,
+    HiBriefcase,
     // HiOutlineQuestionMarkCircle,
     HiOutlineCog
 } from 'react-icons/hi'
+
 
 export const DashboardTop = [
     {
@@ -18,34 +19,34 @@ export const DashboardTop = [
     },
     {
         key: 'sales',
-        label: 'sales',
+        label: 'Sales',
         path: '/sales',
         icon: <HiOutlineCube />
     },
-    // {
-    //     key: 'orders',
-    //     label: 'Orders',
-    //     path: '/orders',
-    //     icon: <HiOutlineShoppingCart />
-    // },
-    // {
-    //     key: 'customers',
-    //     label: 'Customers',
-    //     path: '/customers',
-    //     icon: <HiOutlineUsers />
-    // },
-    // {
-    //     key: 'transactions',
-    //     label: 'Transactions',
-    //     path: '/transactions',
-    //     icon: <HiOutlineDocumentText />
-    // },
-    // {
-    //     key: 'messages',
-    //     label: 'Messages',
-    //     path: '/messages',
-    //     icon: <HiOutlineAnnotation />
-    // }
+    {
+        key: 'orders',
+        label: 'Orders',
+        path: '/orders',
+        icon: <HiOutlineShoppingCart />
+    },
+    {
+        key: 'users',
+        label: 'Users',
+        path: '/users',
+        icon: <HiOutlineUsers />
+    },
+    {
+        key: 'transactions',
+        label: 'Transactions',
+        path: '/transactions',
+        icon: <HiOutlineDocumentText />
+    },
+    {
+        key: 'products',
+        label: 'Products',
+        path: '/products',
+        icon: <HiBriefcase />
+    }
 ]
 
 export const DashboardBottom = [
