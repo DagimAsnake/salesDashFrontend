@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminAuthContext from "../components/store/Admin-authContext";
 
@@ -37,7 +37,9 @@ const AddUser = () => {
         setPassword(event.target.value);
     };
 
-    setRole("Employee");
+    useEffect(() => {
+        setRole("Employee");
+    }, [])
 
 
     const handleSubmit = (event) => {
@@ -72,11 +74,6 @@ const AddUser = () => {
                 setIsPending(false)
                 setErrMsg(data.msg);
 
-                const remainingMilliseconds = 60 * 60 * 1000;
-                const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
-
-                adminAuthCtx.login(data.token, expiryDate.toISOString());
-
                 navigate("/");
 
             };
@@ -85,6 +82,7 @@ const AddUser = () => {
         } else {
             setErrors(validationErrors);
         }
+
     };
 
     const validate = () => {

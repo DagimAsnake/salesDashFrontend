@@ -1,13 +1,12 @@
 import {
     HiOutlineViewGrid,
     HiOutlineCube,
-    HiOutlineShoppingCart,
     HiOutlineUsers,
-    HiOutlineDocumentText,
-    HiBriefcase,
-    // HiOutlineQuestionMarkCircle,
+    // HiOutlineDocumentText,
     HiOutlineCog
 } from 'react-icons/hi'
+import { MdProductionQuantityLimits } from "react-icons/md"
+import { DiGoogleAnalytics } from "react-icons/di"
 
 
 export const DashboardTop = [
@@ -24,10 +23,10 @@ export const DashboardTop = [
         icon: <HiOutlineCube />
     },
     {
-        key: 'orders',
-        label: 'Orders',
-        path: '/orders',
-        icon: <HiOutlineShoppingCart />
+        key: 'analytics',
+        label: 'Analytics',
+        path: '/analytics',
+        icon: <DiGoogleAnalytics />
     },
     {
         key: 'users',
@@ -35,17 +34,17 @@ export const DashboardTop = [
         path: '/users',
         icon: <HiOutlineUsers />
     },
-    {
-        key: 'transactions',
-        label: 'Transactions',
-        path: '/transactions',
-        icon: <HiOutlineDocumentText />
-    },
+    // {
+    //     key: 'transactions',
+    //     label: 'Transactions',
+    //     path: '/transactions',
+    //     icon: <HiOutlineDocumentText />
+    // },
     {
         key: 'products',
         label: 'Products',
         path: '/products',
-        icon: <HiBriefcase />
+        icon: <MdProductionQuantityLimits />
     }
 ]
 
@@ -56,10 +55,4 @@ export const DashboardBottom = [
         path: '/settings',
         icon: <HiOutlineCog />
     },
-    // {
-    //     key: 'support',
-    //     label: 'Help & Support',
-    //     path: '/support',
-    //     icon: <HiOutlineQuestionMarkCircle />
-    // }
 ]
