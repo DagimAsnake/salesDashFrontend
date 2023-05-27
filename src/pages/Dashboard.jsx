@@ -1,7 +1,7 @@
 import React from 'react'
-import DashboardStatus from '../components/DashboardStatus'
-import TransactionChart from '../components/TransactionChart'
-import BuyerPieChart from '../components/BuyerPieChart'
+import DashboardStatus from '../components/Dashboard/DashboardStatus'
+import TransactionChart from '../components/Dashboard/TransactionChart'
+import BuyerPieChart from '../components/Dashboard/BuyerPieChart'
 
 function Dashboard() {
     return (
