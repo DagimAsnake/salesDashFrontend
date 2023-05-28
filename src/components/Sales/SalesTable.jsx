@@ -1,177 +1,181 @@
-// // SalesTable.js
-// import React from 'react';
-
-// const SalesTable = ({ data }) => {
-//   return (
-//     <div className="p-4 bg-white shadow-md rounded-lg">
-//       <h2 className="text-xl font-semibold mb-4">Sales Table</h2>
-//       <table className="min-w-full table-auto">
-//         <thead className="justify-between">
-//           <tr className="bg-gray-800">
-//             <th className="px-2 py-2 text-gray-200">Name</th>
-//             <th className="px-2 py-2 text-gray-200">Sales</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {data.map((row, index) => (
-//             <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-300' : 'bg-gray-200'} text-center`}>
-//               <td className="px-2 py-2">{row.name}</td>
-//               <td className="px-2 py-2">{row.sales}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default SalesTable;
-
-
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from "react";
+import AdminAuthContext from "../store/Admin-authContext";
+import { useTable, useSortBy, useFilters, usePagination } from 'react-table';
 
 const SalesTable = () => {
-  const [sortDirection, setSortDirection] = useState('asc');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const adminAuthCtx = useContext(AdminAuthContext);
 
-  const salesData = [
-    { name: 'Product A', sales: 1000, date: '2022-05-01' },
-    { name: 'Product B', sales: 500, date: '2022-05-01' },
-    { name: 'Product C', sales: 750, date: '2022-05-01' },
-    { name: 'Product A', sales: 800, date: '2022-05-02' },
-    { name: 'Product B', sales: 550, date: '2022-05-02' },
-    { name: 'Product C', sales: 900, date: '2022-05-02' },
-    { name: 'Product A', sales: 1200, date: '2022-05-03' },
-    { name: 'Product B', sales: 650, date: '2022-05-03' },
-    { name: 'Product C', sales: 800, date: '2022-05-03' },
-  ];
+  const [requestEmployee, setRequestEmployee] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSort = (field) => {
-    if (sortDirection === 'asc') {
-      salesData.sort((a, b) => (a[field] > b[field] ? 1 : -1));
-      setSortDirection('desc');
-    } else {
-      salesData.sort((a, b) => (a[field] < b[field] ? 1 : -1));
-      setSortDirection('asc');
-    }
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      const response = await fetch("http://localhost:8000/sales/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + adminAuthCtx.token,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setRequestEmployee(data.msg);
+      setIsLoading(false);
+    };
+    fetchEmployee();
+  }, [adminAuthCtx]);
+
+  const data = React.useMemo(() => requestEmployee, [requestEmployee]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Product Name',
+        accessor: '_id.productName',
+      },
+      {
+        Header: 'Sales',
+        accessor: 'totalAddedCost',
+        sortType: 'basic',
+      },
+    ],
+    []
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    setFilter,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    { columns, data },
+    useFilters,
+    useSortBy,
+    usePagination,
+    initialState => ({ ...initialState, pageSize: 6 })
+  );
+
+  const handleFilterChange = (e) => {
+    const value = e.target.value || undefined;
+    setFilter('_id.productName', value);
   };
-
-  const handleFilter = (value) => {
-    setSelectedFilter(value);
-  };
-
-  const filteredData = selectedFilter
-    ? salesData.filter((data) => data.name === selectedFilter)
-    : salesData;
 
   return (
-    <div className="my-8">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium">Sales Data</h2>
-        <div className="flex items-center">
-          <label htmlFor="filter" className="mr-2">
-            Filter by product:
-          </label>
-          <select
-            id="filter"
-            className="border rounded-sm px-2 py-1"
-            value={selectedFilter}
-            onChange={(e) => handleFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            <option value="Product A">Product A</option>
-            <option value="Product B">Product B</option>
-            <option value="Product C">Product C</option>
-          </select>
+    <>
+      {isLoading && (
+        <div className="flex justify-center items-center h-screen">
+          <div className="h-8 w-8 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+          <div className="h-8 w-8 ml-4 border-t-2 border-b-2 border-gray-900 rounded-full animate-ping"></div>
+        </div>
+      )}
+      <div className="my-8 overflow-x-auto">
+        <input
+          className="my-4 px-4 py-2 w-full border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+          placeholder="Search by product name..."
+          onChange={handleFilterChange}
+        />
+        <table {...getTableProps()} className="w-full border-collapse table-auto sm:min-w-max">
+          <thead className="bg-gray-50">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="border py-3 px-4 cursor-pointer font-medium text-gray-500 text-left uppercase tracking-wider"
+                  >
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
+            {!isLoading &&
+              page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    {...row.getRowProps()}
+                    className={`${row.original.totalAddedCost === 0 ? 'hidden' : ''}`}
+                  >
+                    {row.cells.map((cell) => (
+                      <td className="border py-3 px-4 text-gray-700 font-medium" {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+        <div className="my-4 flex justify-between items-center">
+          <div>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              {'<<'}
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
+              onClick={previousPage}
+              disabled={!canPreviousPage}
+            >
+              {'<'}
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
+              onClick={nextPage}
+              disabled={!canNextPage}
+            >
+              {'>'}
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              {'>>'}
+            </button>
+          </div>
+          <div>
+            <span>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span>
+              | Go to page{' '}
+              <input
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  gotoPage(page);
+                }}
+                className="border border-gray-300 px-2 py-1 rounded-md ml-2 w-20"
+                min="1"
+                max={pageOptions.length}
+              />
+            </span>
+          </div>
         </div>
       </div>
-      <table className="w-full border-collapse table-auto">
-        <thead>
-          <tr>
-            <th
-              className="border py-2 px-4 cursor-pointer"
-              onClick={() => handleSort('name')}
-            >
-              Product Name
-              {sortDirection === 'asc' ? (
-                <svg
-                  className="inline-block h-4 w-4 ml-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="inline-block h-4 w-4 ml-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 15l7-7 7 7"
-                  />
-                </svg>
-              )}
-            </th>
-            <th
-              className="border py-2 px-4 cursor-pointer"
-              onClick={() => handleSort('sales')}
-            >
-              Sales
-              {sortDirection === 'asc' ? (
-                <svg
-                  className="inline-blockh-4 w-4 ml-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="inline-block h-4 w-4 ml-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 15l7-7 7 7"
-                  />
-                </svg>
-              )}
-            </th>
-            <th className="border py-2 px-4">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((data, index) => (
-            <tr key={index}>
-              <td className="border py-2 px-4">{data.name}</td>
-              <td className="border py-2 px-4">{data.sales}</td>
-              <td className="border py-2 px-4">{data.date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    </>
   );
 };
 

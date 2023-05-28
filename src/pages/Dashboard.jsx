@@ -7,8 +7,10 @@ function Dashboard() {
     return (
         <div className="flex flex-col gap-4">
             <DashboardStatus />
-            <div className="flex flex-row gap-4 w-full">
-                <TransactionChart />
+            <div className="grid grid-cols-4 gap-2">
+                <div className="col-span-3">
+                    <TransactionChart />
+                </div>
                 <BuyerPieChart />
             </div>
         </div >
