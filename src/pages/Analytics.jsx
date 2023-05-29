@@ -10,13 +10,19 @@ const AnalyticsPage = () => {
     return (
         <div className="container mx-auto">
             <h1 className="text-2xl font-bold mb-4">Analytics</h1>
-            <AnalyticsChart />
+            <div className='grid grid-cols-4 gap-10'>
+                <div className='col-span-2'>
+                    <AnalyticsChart />
+                </div>
+                <div className='ml-32'>
+                    <LocationPieChart />
+                </div>
+            </div>
             <AnalyticsTable />
             <div className='grid grid-cols-4 gap-5'>
                 <div className='col-span-3'>
                     <RecentProdcut />
                 </div>
-                <LocationPieChart />
             </div>
         </div>
     );

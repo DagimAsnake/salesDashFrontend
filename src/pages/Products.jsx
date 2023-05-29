@@ -34,23 +34,21 @@ function Products() {
                     </div>
                 </div>
             </div>}
-            <div className="flex flex-wrap -mx-4">
+            <div className="grid grid-cols-4 gap-4 mx-auto">
                 {!isLoading && requestEmployee.length <= 0 && (
                     <h3 className="mt-5">There are no Products.</h3>)}
                 {!isLoading && requestEmployee.map((emp) => {
                     return (
-                        <div key={emp._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto px-4 mb-8">
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                                <div className="px-6 py-4">
-                                    <h2 className="text-xl font-bold text-gray-800 mb-2">{emp.productName}</h2>
-                                    <p className="text-sm text-gray-600 mb-2">Type: {emp.productType} </p>
-                                    <p className="text-lg text-gray-900 font-bold mb-2">${emp.cost}</p>
-                                    <Link to={`/product/${emp._id}`}>
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            Read more ...
-                                        </button>
-                                    </Link>
-                                </div>
+                        <div key={emp._id} className="bg-white rounded-lg shadow-lg overflow-hidden max-w-xs">
+                            <div className="px-4 py-2">
+                                <h2 className="text-xl font-bold text-gray-800 mb-2">{emp.productName}</h2>
+                                <p className="text-sm text-gray-600 mb-2">Type: {emp.productType} </p>
+                                <p className="text-lg text-gray-900 font-bold mb-2">${emp.cost}</p>
+                                <Link to={`/product/${emp._id}`}>
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Read more ...
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     );

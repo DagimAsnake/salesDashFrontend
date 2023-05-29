@@ -27,7 +27,14 @@ function EmpListDetails() {
 
   return (
     <>
-      {isLoading && <h4>Loading.....</h4>}
+      {isLoading && <div className="flex">
+        <div className="m-auto">
+          <div className="inline-flex items-center justify-center">
+            <div className="h-8 w-8 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+            <div className="h-8 w-8 ml-4 border-t-2 border-b-2 border-gray-900 rounded-full animate-ping"></div>
+          </div>
+        </div>
+      </div>}
 
       {!isLoading && (
         <div className="grid grid-cols-2 m-20">
@@ -46,6 +53,10 @@ function EmpListDetails() {
             <div className="flex justify-start p-5">
               <h4 className="text-blue-500 text-2xl mr-4 font-semibold">Email:</h4>
               <div className="pt-2 font-medium">{requestEmployee.email}</div>
+            </div>
+            <div className="flex justify-start p-5">
+              <h4 className="text-blue-500 text-2xl mr-4 font-semibold">Role:</h4>
+              <div className="pt-2 font-medium">{requestEmployee.role}</div>
             </div>
           </div>
         </div>

@@ -74,7 +74,7 @@ const AddUser = () => {
                 setIsPending(false)
                 setErrMsg(data.msg);
 
-                navigate("/");
+                navigate("/users");
 
             };
 

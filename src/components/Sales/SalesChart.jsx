@@ -15,7 +15,7 @@ const SalesChart = () => {
     return (
         <div className="my-8">
             <h2 className="text-lg font-medium mb-4">Sales Chart</h2>
-            <LineChart width={800} height={400} data={data}>
+            <LineChart width={700} height={400} data={data}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="3 3" />

@@ -78,8 +78,12 @@ const SalesTable = () => {
         </div>
       )}
       <div className="my-8 overflow-x-auto">
+        <label htmlFor="search" className="mr-2">
+          Search:
+        </label>
         <input
-          className="my-4 px-4 py-2 w-full border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+          id="search"
+          className="my-4 px-4 py-2 w-56 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
           placeholder="Search by product name..."
           onChange={handleFilterChange}
         />
