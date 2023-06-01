@@ -2,6 +2,7 @@ import React from 'react'
 import DashboardStatus from '../components/Dashboard/DashboardStatus'
 import TransactionChart from '../components/Dashboard/TransactionChart'
 import BuyerPieChart from '../components/Dashboard/BuyerPieChart'
+import RecentProduct from '../components/Analytics/RecentProduct'
 
 function Dashboard() {
     return (
@@ -13,6 +14,7 @@ function Dashboard() {
                 </div>
                 <BuyerPieChart />
             </div>
+            <RecentProduct />
         </div >
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminAuthContext from "../components/store/Admin-authContext";
 
@@ -12,7 +12,7 @@ const AddUser = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("Employee");
+    const [role, setRole] = useState("");
     const [errors, setErrors] = useState({});
     const [errMsg, setErrMsg] = useState("")
     const [isPending, setIsPending] = useState(false)
@@ -37,9 +37,9 @@ const AddUser = () => {
         setPassword(event.target.value);
     };
 
-    useEffect(() => {
-        setRole("Employee");
-    }, [])
+    const handleRoleChange = (event) => {
+        setRole(event.target.value)
+    }
 
 
     const handleSubmit = (event) => {
@@ -89,20 +89,30 @@ const AddUser = () => {
         const errors = {};
         if (!firstname) {
             errors.firstname = "Firstname is required";
+            setIsPending(false)
         }
         if (!lastname) {
             errors.lastname = "lastname is required";
+            setIsPending(false)
         }
         if (!username) {
             errors.username = "username is required";
+            setIsPending(false)
         }
         if (!email) {
             errors.email = "Email is required";
+            setIsPending(false)
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             errors.email = "Email is invalid";
+            setIsPending(false)
         }
         if (!password) {
             errors.password = "Password is required";
+            setIsPending(false)
+        }
+        if (!role) {
+            errors.role = "Role is required";
+            setIsPending(false)
         }
         return errors;
     };
@@ -187,6 +197,36 @@ const AddUser = () => {
                                 className={`w-full p-3 border rounded-md ${errors.password ? "border-red-500" : "border-gray-300"}`}
                             />
                             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                        </div>
+                        <div className="">
+                            <label htmlFor="role" className="block font-medium mb-2">
+                                Role
+                            </label>
+                            <div className="flex flex-col">
+                                <label className="inline-flex items-center">
+                                    <input
+                                        type="radio"
+                                        className="form-radio"
+                                        name="role"
+                                        value="Sales"
+                                        checked={role === "Sales"}
+                                        onChange={handleRoleChange}
+                                    />
+                                    <span className="ml-2">Sales</span>
+                                </label>
+                                <label className="inline-flex items-center">
+                                    <input
+                                        type="radio"
+                                        className="form-radio"
+                                        name="role"
+                                        value="Marketing"
+                                        checked={role === "Marketing"}
+                                        onChange={handleRoleChange}
+                                    />
+                                    <span className="ml-2">Marketing</span>
+                                </label>
+                            </div>
+                            {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
                         </div>
                     </div>
                     <p className="text-red-500 text-lg">{errMsg}</p>

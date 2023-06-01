@@ -57,11 +57,10 @@ function Users() {
                                                     emp.role === "Admin" ? "hidden" : ""
                                                 )}
                                             >
-                                                <p className="text-gray-800 font-semibold">
+                                                <p className="text-gray-800 font-semibold col-span-2">
                                                     {emp.firstname} {emp.lastname}
                                                 </p>
-
-                                                <p className="flex justify-end">
+                                                <p>
                                                     <Link
                                                         to={`/user/${emp._id}`}
                                                         className="bg-blue-500 text-white rounded-lg hover:bg-blue-400 px-3 py-2 text-xl font-semibold cursor-pointer tracking-wider transition duration-300 ease-in-out"
@@ -69,6 +68,7 @@ function Users() {
                                                         Details
                                                     </Link>
                                                 </p>
+
                                             </div>
                                         );
                                     })}

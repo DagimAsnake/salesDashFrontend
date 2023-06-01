@@ -73,7 +73,7 @@ function SidebarLink({ item, role }) {
     const { pathname } = useLocation()
 
     return (
-        <Link to={item.path} className={classNames(pathname === item.path ? "text-white bg-neutral-700" : "text-neutral-400", linkClasses, role === "Employee" && (item.label === 'Users' || item.label === "Products" || item.label === "Analytics" || item.label === "Sales") ? "hidden" : "")}>
+        <Link to={item.path} className={classNames(pathname === item.path ? "text-white bg-neutral-700" : "text-neutral-400", linkClasses, role === "Marketing" && (item.label === 'Users' || item.label === "Products" || item.label === "Sales") ? "hidden" : "", role === "Sales" && (item.label === 'Users' || item.label === "Products" || item.label === "Analytics") ? "hidden" : "")}>
             <span className='text-xl'>{item.icon}</span>
             <span className='hidden sm:inline md:inline'>{item.label}</span>
         </Link>
