@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import AdminAuthContext from "../store/Admin-authContext";
 import { Table, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const SalesTable = () => {
   const adminAuthCtx = useContext(AdminAuthContext);
@@ -83,6 +85,31 @@ const SalesTable = () => {
           className="bg-white"
           rowClassName="hover:bg-gray-100"
         />
+
+        <button
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none my-5"
+          onClick={() => {
+            const doc = new jsPDF()
+
+            const date = new Date();
+            const timeStamp = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-${date.getHours()}_${date.getMinutes()}`
+
+            doc.autoTable({
+              head: [
+                ["Product Name", "Sales"],
+
+              ],
+              body: filteredData.map(row => [
+                row.productName,
+                row.totalAddedCost
+              ])
+            })
+
+            doc.save(`sales_report_${timeStamp}.pdf`)
+          }}
+        >
+          Download PDF
+        </button>
       </div>
     </>
   );
