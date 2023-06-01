@@ -13,7 +13,7 @@ const SalesChart = () => {
     ];
 
     return (
-        <div className="my-8">
+        <div className="my-8 bg-white">
             <h2 className="text-lg font-medium mb-4">Sales Chart</h2>
             <LineChart width={700} height={400} data={data}>
                 <XAxis dataKey="name" />

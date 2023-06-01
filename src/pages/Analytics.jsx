@@ -10,8 +10,8 @@ const AnalyticsPage = () => {
     return (
         <div className="container mx-auto">
             <h1 className="text-2xl font-bold mb-4">Analytics</h1>
-            <div className='grid grid-cols-4 gap-10'>
-                <div className='col-span-2'>
+            <div className='grid grid-cols-4'>
+                <div className='col-span-2 bg-white'>
                     <AnalyticsChart />
                 </div>
                 <div className='ml-32'>
