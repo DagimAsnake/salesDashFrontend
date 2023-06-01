@@ -27,7 +27,7 @@ function Users() {
 
     return (
         <>
-            <div className="bg-gray-100 px-4 py-8">
+            <div className=" px-4 py-8">
                 <div className="mx-auto max-w-3xl">
                     {isLoading && <div className="flex">
                         <div className="m-auto">

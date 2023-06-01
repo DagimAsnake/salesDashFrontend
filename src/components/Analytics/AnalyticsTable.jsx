@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useTable, useSortBy, useFilters, useGlobalFilter, usePagination } from "react-table";
+import { Table, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import AdminAuthContext from "../store/Admin-authContext";
 
 const AnalyticsTable = () => {
     const adminAuthCtx = useContext(AdminAuthContext);
 
     const [requestEmployee, setRequestEmployee] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -20,167 +22,56 @@ const AnalyticsTable = () => {
             console.log(data);
             setRequestEmployee(data.msg);
             setIsLoading(false);
+            setFilteredData(data.msg.filter(record => record.totalAddedCost !== 0));
         };
         fetchEmployee();
     }, [adminAuthCtx]);
 
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        const filteredData = requestEmployee.filter((record) =>
+            record.productName.toLowerCase().includes(value)
+        );
+        setFilteredData(filteredData);
+    };
+
     const columns = [
         {
-            Header: "Product Name",
-            accessor: "_id.productName",
+            title: 'Product Name',
+            dataIndex: 'productName',
+            sorter: (a, b) => a.productName.localeCompare(b.productName),
+            sortDirections: ['ascend', 'descend'],
+            key: 'productName'
         },
         {
-            Header: "Sales",
-            accessor: "totalAddedCost",
+            title: 'Sales',
+            dataIndex: 'totalAddedCost',
+            sorter: (a, b) => a.totalAddedCost - b.totalAddedCost,
+            sortDirections: ['ascend', 'descend'],
+            key: 'sales'
         },
         {
-            Header: "Users",
-            accessor: "totalUsers",
+            title: 'Users',
+            dataIndex: 'totalUsers',
+            sorter: (a, b) => a.totalUsers - b.totalUsers,
+            sortDirections: ['ascend', 'descend'],
+            key: 'users'
         },
         {
-            Header: "Product Category",
-            accessor: "_id.productType",
+            title: 'Product Category',
+            dataIndex: 'productType',
+            sorter: (a, b) => a.productType.localeCompare(b.productType),
+            sortDirections: ['ascend', 'descend'],
+            key: 'productType'
         },
     ];
 
-    const Table = ({ columns, data }) => {
-        const {
-            getTableProps,
-            getTableBodyProps,
-            headerGroups,
-            prepareRow,
-            page,
-            canPreviousPage,
-            canNextPage,
-            pageOptions,
-            pageCount,
-            gotoPage,
-            nextPage,
-            previousPage,
-            setPageSize,
-            state: { pageIndex, pageSize, globalFilter },
-            setGlobalFilter,
-        } = useTable(
-            {
-                columns,
-                data,
-                initialState: { pageIndex: 0, pageSize: 10 },
-            },
-            useFilters,
-            useGlobalFilter,
-            useSortBy,
-            usePagination
-        );
-
-        // const { globalFilter } = state;
-
-        return (
-            <>
-                <div className="flex items-center mb-5">
-                    <label htmlFor="search" className="mr-2">
-                        Search:
-                    </label>
-                    <input
-                        id="search"
-                        type="text"
-                        className="border border-gray-300 p-1"
-                        value={globalFilter || ""}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                    />
-                </div>
-                <table {...getTableProps()} className="w-full table-auto border border-gray-300 rounded-lg">
-                    <thead>
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-200">
-                                {headerGroup.headers.map((column) => (
-                                    <th
-                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                        className="px-4 py-2 text-left font-medium text-gray-700"
-                                    >
-                                        {column.render("Header")}
-                                        <span>
-                                            {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
-                                        </span>
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
-                        {page.map((row) => {
-                            prepareRow(row);
-                            return (
-                                <tr
-                                    {...row.getRowProps()}
-                                    className={`${row.original.totalAddedCost === 0 ? "hidden" : ""}`}
-                                >
-                                    {row.cells.map((cell) => (
-                                        <td
-                                            {...cell.getCellProps()}
-                                            className="px-4 py-2 text-left font-normal text-gray-700"
-                                        >
-                                            {cell.render("Cell")}
-                                        </td>
-                                    ))}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-                <div className="mt-4 flex justify-between items-center">
-                    <div className="flex items-center">
-                        <button
-                            onClick={() => gotoPage(0)}
-                            disabled={!canPreviousPage}
-                            className="px-2 py-1 border border-gray-300 rounded-l-lg hover:bg-gray-200"
-                        >
-                            {"<<"}
-                        </button>{" "}                     <button
-                            onClick={() => previousPage()}
-                            disabled={!canPreviousPage}
-                            className="px-2 py-1 border border-gray-300 hover:bg-gray-200"
-                        >
-                            {"<"}
-                        </button>{" "}
-                        <button
-                            onClick={() => nextPage()}
-                            disabled={!canNextPage}
-                            className="px-2 py-1 border border-gray-300 hover:bg-gray-200"
-                        >
-                            {">"}
-                        </button>{" "}
-                        <button
-                            onClick={() => gotoPage(pageCount - 1)}
-                            disabled={!canNextPage}
-                            className="px-2 py-1 border border-gray-300 rounded-r-lg hover:bg-gray-200"
-                        >
-                            {">>"}
-                        </button>{" "}
-                        <span className="ml-2">
-                            Page{" "}
-                            <strong>
-                                {pageIndex + 1} of {pageOptions.length}
-                            </strong>{" "}
-                        </span>
-                    </div>
-                    <div>
-                        <select
-                            className="border border-gray-300 px-2 py-1"
-                            value={pageSize}
-                            onChange={(e) => {
-                                setPageSize(Number(e.target.value));
-                            }}
-                        >
-                            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                                <option key={pageSize} value={pageSize}>
-                                    Show {pageSize}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div >
-            </>
-        );
+    const pagination = {
+        showSizeChanger: true,
+        defaultPageSize: 6,
+        showQuickJumper: true,
+        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+        pageSizeOptions: ['6', '12', '24', '48']
     };
 
     return (
@@ -191,11 +82,21 @@ const AnalyticsTable = () => {
                     <div className="h-8 w-8 ml-4 border-t-2 border-b-2 border-gray-900 rounded-full animate-ping"></div>
                 </div>
             )}
-            <div className="my-8">
-                <h2 className="text-lg font-medium mb-4 text-gray-800">Sales and User Data Table</h2>
-                <div className="overflow-x-auto">
-                    <Table columns={columns} data={requestEmployee} />
-                </div>
+            <div className="my-8 overflow-x-auto">
+                <Input
+                    placeholder="Search by product name..."
+                    prefix={<SearchOutlined />}
+                    onChange={handleSearch}
+                    className="my-4 w-56 bg-gray-100 text-gray-700 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                />
+                <Table
+                    columns={columns}
+                    dataSource={filteredData}
+                    pagination={pagination}
+                    loading={isLoading}
+                    className="bg-white"
+                    rowClassName="hover:bg-gray-100"
+                />
             </div>
         </>
     );

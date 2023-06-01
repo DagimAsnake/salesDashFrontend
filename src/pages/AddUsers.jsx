@@ -118,7 +118,7 @@ const AddUser = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center  bg-gray-100">
+        <div className="flex flex-col justify-center items-center ">
             <div className="sm:w-1/2">
                 <form onSubmit={handleSubmit} className="bg-white p-12 rounded-lg shadow-md">
                     <h2 className="text-3xl font-bold mb-8">Register</h2>
