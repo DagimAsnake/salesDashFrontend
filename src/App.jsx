@@ -17,6 +17,8 @@ import UserDetails from './pages/UsersDetails'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Settings from './pages/Settings'
+import AddProducts from './pages/AddProducts'
+import InvProducts from './pages/InvProducts'
 
 function App() {
   const adminAuthCtx = useContext(AdminAuthContext)
@@ -38,9 +40,10 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path='analytics' element={<Analytics />} />
           <Route path='user/:userId' element={<UserDetails />} />
-          <Route path='products' element={<Products />} />
+          <Route path='invproducts' element={<InvProducts />} />
           <Route path='product/:proId' element={<ProductDetails />} />
           <Route path='settings' element={<Settings />} />
+          <Route path='addproducts' element={<AddProducts />} />
         </Route>
         <Route path='/login' element={<LoginAdmin />} />
         <Route path='/forgetpassword' element={<ForgetPassword />} />

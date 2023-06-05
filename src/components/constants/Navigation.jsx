@@ -2,9 +2,9 @@ import {
     HiOutlineViewGrid,
     HiOutlineCube,
     HiOutlineUsers,
-    // HiOutlineDocumentText,
     HiOutlineCog
 } from 'react-icons/hi'
+import { RiProductHuntLine } from "react-icons/ri"
 import { MdProductionQuantityLimits } from "react-icons/md"
 import { DiGoogleAnalytics } from "react-icons/di"
 
@@ -34,16 +34,16 @@ export const DashboardTop = [
         path: '/users',
         icon: <HiOutlineUsers />
     },
-    // {
-    //     key: 'transactions',
-    //     label: 'Transactions',
-    //     path: '/transactions',
-    //     icon: <HiOutlineDocumentText />
-    // },
     {
-        key: 'products',
+        key: 'addproduct',
+        label: 'Add Products',
+        path: '/addproducts',
+        icon: <RiProductHuntLine />
+    },
+    {
+        key: 'invproducts',
         label: 'Products',
-        path: '/products',
+        path: '/invproducts',
         icon: <MdProductionQuantityLimits />
     }
 ]
