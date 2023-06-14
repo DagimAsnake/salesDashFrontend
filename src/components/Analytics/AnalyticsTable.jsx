@@ -8,7 +8,6 @@ import "jspdf-autotable";
 const AnalyticsTable = () => {
     const adminAuthCtx = useContext(AdminAuthContext);
 
-    const [requestEmployee, setRequestEmployee] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,19 +21,27 @@ const AnalyticsTable = () => {
             });
             const data = await response.json();
             console.log(data);
-            setRequestEmployee(data.msg);
             setIsLoading(false);
             setFilteredData(data.msg.filter(record => record.totalAddedCost !== 0));
         };
         fetchEmployee();
     }, [adminAuthCtx]);
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         const value = e.target.value.toLowerCase();
-        const filteredData = requestEmployee.filter((record) =>
-            record.productName.toLowerCase().includes(value)
-        );
-        setFilteredData(filteredData);
+        try {
+            const response = await fetch(`http://localhost:8000/analytics/search?search=${value}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + adminAuthCtx.token,
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            setFilteredData(data.msg.filter(record => record.totalAddedCost !== 0));
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const columns = [

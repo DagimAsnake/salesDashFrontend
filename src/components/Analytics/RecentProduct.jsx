@@ -16,20 +16,30 @@ const RecentProduct = () => {
 
     useEffect(() => {
         const fetchEmployee = async () => {
-            const response = await fetch("http://localhost:8000/analytics/recent", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + adminAuthCtx.token,
-                },
+            const searchParams = new URLSearchParams({
+              search: searchText,
+              startDate: dateRange[0] ? dateRange[0].toISOString() : '',
+              endDate: dateRange[1] ? dateRange[1].toISOString() : '',
             });
+          
+            const response = await fetch(
+              `http://localhost:8000/analytics/searchrecent?${searchParams}`,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Bearer ' + adminAuthCtx.token,
+                },
+              }
+            );
+          
             const data = await response.json();
             console.log(data);
-            setRequestEmployee(data.msg);
+            setRequestEmployee(data.recentProducts);
             setIsLoading(false);
-            setFilteredData(data.msg);
-        };
+            setFilteredData(data.recentProducts.filter(record => record.totalAddedCost !== 0));
+          };
         fetchEmployee();
-    }, [adminAuthCtx]);
+    }, [adminAuthCtx, searchText, dateRange]);
 
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
@@ -61,7 +71,7 @@ const RecentProduct = () => {
         },
         {
             title: 'Price',
-            dataIndex: 'price',
+            dataIndex: 'totalAddedCost',
             sorter: (a, b) => a.price - b.price,
             sortDirections: ['ascend', 'descend'],
             key: 'price'

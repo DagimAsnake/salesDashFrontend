@@ -11,23 +11,30 @@ const SalesTable = () => {
   const [requestEmployee, setRequestEmployee] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const fetchEmployee = async () => {
-      const response = await fetch("http://localhost:8000/sales/", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + adminAuthCtx.token,
-        },
-      });
-      const data = await response.json();
-      console.log(data);
-      setRequestEmployee(data.msg);
-      setIsLoading(false);
-      setFilteredData(data.msg.filter(record => record.totalAddedCost !== 0));
+      try {
+        const response = await fetch(`http://localhost:8000/sales/salesSearch?search=${search}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + adminAuthCtx.token,
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+        setRequestEmployee(data.msg);
+        console.log(data.msg)
+        setIsLoading(false);
+        setFilteredData(data.msg.filter(record => record.totalAddedCost !== 0));
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     };
     fetchEmployee();
-  }, [adminAuthCtx]);
+  }, [adminAuthCtx, search]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -35,6 +42,7 @@ const SalesTable = () => {
       record.productName.toLowerCase().includes(value)
     );
     setFilteredData(filteredData.filter(record => record.totalAddedCost !== 0));
+    setSearch(value);
   };
 
   const columns = [

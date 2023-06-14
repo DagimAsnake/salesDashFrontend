@@ -8,13 +8,13 @@ import "jspdf-autotable";
 const SalesPopular = () => {
     const adminAuthCtx = useContext(AdminAuthContext);
 
-    const [requestEmployee, setRequestEmployee] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const fetchEmployee = async () => {
-            const response = await fetch("http://localhost:8000/sales/popular", {
+            const response = await fetch(`http://localhost:8000/sales/popularsearch${searchQuery}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + adminAuthCtx.token,
@@ -22,19 +22,15 @@ const SalesPopular = () => {
             });
             const data = await response.json();
             console.log(data);
-            setRequestEmployee(data.msg);
             setIsLoading(false);
             setFilteredData(data.msg);
         };
         fetchEmployee();
-    }, [adminAuthCtx]);
+    }, [adminAuthCtx, searchQuery]);
 
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
-        const filteredData = requestEmployee.filter((record) =>
-            record.productName.toLowerCase().includes(value)
-        );
-        setFilteredData(filteredData);
+        setSearchQuery(`?search=${value}`);
     };
 
     const columns = [
